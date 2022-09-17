@@ -1,5 +1,6 @@
 package mantis.tests;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class IssuesTest extends BaseTest{
@@ -11,11 +12,12 @@ public class IssuesTest extends BaseTest{
 
         //шаг 1 авторизация
         mantisSite.login("admin", "admin20");
-        mantisSite.getMainPage().waitCurrentUrlContains();
+        Assertions.assertEquals(mantisSite.getMainPage().getCurrentUrl(), driver.getCurrentUrl(), "Current url isn't MainPage");
 
         //шаг 2 создание бага
         mantisSite.getBugReportPage().clickReportIssue();
-        mantisSite.getBugReportPage().waitCurrentUrlContains();
+        Assertions.assertEquals(mantisSite.getBugReportPage().getCurrentUrl(), driver.getCurrentUrl(), "Current url isn't BugReportPage");
+
 
         mantisSite.getBugReportPage().pasteSummary(summary);
         softAssertions.assertThat(mantisSite.getBugReportPage().getSummary()).as("Summary").isEqualTo(summary);
@@ -28,22 +30,23 @@ public class IssuesTest extends BaseTest{
         String issueId = mantisSite.getBugReportPage().getNumberIssueId();
         String issueIdShort = String.valueOf(Integer.parseInt(issueId));
 
-        mantisSite.getViewIssuesPage().waitCurrentUrlContains();
+        sleep(5000);
+        Assertions.assertEquals(mantisSite.getViewIssuesPage().getCurrentUrl(), driver.getCurrentUrl(), "Current url isn't ViewIssuesPage");
 
         //Шаг 3 Ищем наш созданный баг в поиске
         mantisSite.getViewIssuesPage().searchByBugId(issueId);
-        mantisSite.getViewIssueDetailsPage().waitCurrentUrlContains(issueIdShort);
+        Assertions.assertEquals(mantisSite.getViewIssueDetailsPage().getCurrentUrl() + issueIdShort, driver.getCurrentUrl(), "Current url isn't ViewIssueDetailsPage");
 
         //Шаг 4 Удаление
         mantisSite.getViewIssueDetailsPage().clickSubmitDelete();
-        mantisSite.getDeleteIssuesPage().waitCurrentUrlContains();
+        Assertions.assertEquals(mantisSite.getDeleteIssuesPage().getCurrentUrl(), driver.getCurrentUrl(), "Current url isn't DeleteIssuesPage");
 
         mantisSite.getDeleteIssuesPage().clickDeleteIssues();
-        mantisSite.getViewIssuesPage().waitCurrentUrlContains();
+        Assertions.assertEquals(mantisSite.getViewIssuesPage().getCurrentUrl(), driver.getCurrentUrl(), "Current url isn't ViewIssuesPage");
 
         //Шаг 5 Проверяем удалился ли наш баг репорт
         mantisSite.getViewIssuesPage().searchByBugId(issueId);
-        mantisSite.getViewIssueDetailsPage().waitCurrentUrlContains(issueIdShort);
+        Assertions.assertEquals(mantisSite.getViewIssueDetailsPage().getCurrentUrl() + issueIdShort, driver.getCurrentUrl(), "Current url isn't ViewIssueDetailsPage");
 
         softAssertions.assertThat(mantisSite.getViewIssueDetailsPage().getIssueNotFound()).as("not found").isEqualTo("Issue " + Integer.parseInt(issueId) + " not found.");
         softAssertions.assertAll();
@@ -51,6 +54,6 @@ public class IssuesTest extends BaseTest{
         //logout
         mantisSite.getViewIssuesPage().clickUserInfo();
         mantisSite.getViewIssuesPage().clickLogout();
-        mantisSite.getLoginPage().waitCurrentUrlContains();
+        Assertions.assertEquals(mantisSite.getLoginPage().getCurrentUrl(), driver.getCurrentUrl(), "Current url isn't LoginPage");
     }
 }

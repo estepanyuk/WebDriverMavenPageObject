@@ -20,12 +20,4 @@ public class BasePage {
         return currentUrl;
     }
 
-    public void waitCurrentUrlContains(String suffix) {
-        wait.until(ExpectedConditions.urlContains(currentUrl + suffix));
-    }
-
-    public void waitCurrentUrlContains() {
-        waitCurrentUrlContains("");
-    }
-
 }

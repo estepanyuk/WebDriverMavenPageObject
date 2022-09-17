@@ -31,4 +31,12 @@ public class BaseTest {
     public void tearDown() {
         driver.quit();
     }
+
+    public void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

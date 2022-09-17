@@ -12,8 +12,6 @@ public class MantisSite {
     private ViewIssueDetailsPage viewIssueDetailsPage;
     private DeleteIssuesPage deleteIssuesPage;
 
-
-
     public MantisSite(WebDriver driver) {
         this.driver = driver;
 
