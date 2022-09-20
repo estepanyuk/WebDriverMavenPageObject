@@ -20,10 +20,10 @@ public class IssuesTest extends BaseTest{
 
 
         mantisSite.getBugReportPage().pasteSummary(summary);
-        softAssertions.assertThat(mantisSite.getBugReportPage().getSummary()).as("Summary").isEqualTo(summary);
+        Assertions.assertEquals(summary, mantisSite.getBugReportPage().getSummary(), "Summary don't correct");
 
         mantisSite.getBugReportPage().pasteDescription(description);
-        softAssertions.assertThat(mantisSite.getBugReportPage().getDescription()).as("Description").isEqualTo(description);
+        Assertions.assertEquals(description, mantisSite.getBugReportPage().getDescription(), "Description don't correct");
 
         mantisSite.getBugReportPage().clickSubmitIssue();
 
@@ -37,6 +37,10 @@ public class IssuesTest extends BaseTest{
         mantisSite.getViewIssuesPage().searchByBugId(issueId);
         Assertions.assertEquals(mantisSite.getViewIssueDetailsPage().getCurrentUrl() + issueIdShort, driver.getCurrentUrl(), "Current url isn't ViewIssueDetailsPage");
 
+        softAssertions.assertThat(mantisSite.getViewIssueDetailsPage().getBugSummary()).as("Summary").isEqualTo(issueId +": "+ summary);
+        softAssertions.assertThat(mantisSite.getViewIssueDetailsPage().getBugDescription()).as("Description").isEqualTo(description);
+        softAssertions.assertAll();
+
         //Шаг 4 Удаление
         mantisSite.getViewIssueDetailsPage().clickSubmitDelete();
         Assertions.assertEquals(mantisSite.getDeleteIssuesPage().getCurrentUrl(), driver.getCurrentUrl(), "Current url isn't DeleteIssuesPage");
@@ -48,8 +52,7 @@ public class IssuesTest extends BaseTest{
         mantisSite.getViewIssuesPage().searchByBugId(issueId);
         Assertions.assertEquals(mantisSite.getViewIssueDetailsPage().getCurrentUrl() + issueIdShort, driver.getCurrentUrl(), "Current url isn't ViewIssueDetailsPage");
 
-        softAssertions.assertThat(mantisSite.getViewIssueDetailsPage().getIssueNotFound()).as("not found").isEqualTo("Issue " + Integer.parseInt(issueId) + " not found.");
-        softAssertions.assertAll();
+        Assertions.assertEquals("Issue " + Integer.parseInt(issueId) + " not found.", mantisSite.getViewIssueDetailsPage().getIssueNotFound());
 
         //logout
         mantisSite.getViewIssuesPage().clickUserInfo();
